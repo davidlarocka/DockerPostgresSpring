@@ -1,0 +1,31 @@
+version: '3.9'
+
+services:
+  java_db:
+    container_name: java_db
+    image: postgres:12
+    ports:
+      - 5431:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+  api-app-java:
+    container_name: api-app-java
+    image: img-api-java-app:1.0.1
+    build: .
+    ports: 
+    - 8080:8080
+    depends_on:
+    - java_db
+    environment:
+      - DATABASE_URL=jdbc:postgresql://java_db:5432/postgres?createDatabaseIfNotExist=true
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres   
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080       
+      
+    
